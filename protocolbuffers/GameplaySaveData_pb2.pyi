@@ -1874,6 +1874,8 @@ class MatchmakingCandidateData(Message):
     exchange_data_type: 'int'  # uint32
     exchange_data_household_id: 'int'  # uint64
     family_info_msg: 'bytes'
+    voice_actor: 'int'  # uint32
+    voice_pitch: 'float'  # float32
 
 
 class PersistableUiDialogService(Message):

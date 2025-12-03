@@ -13,6 +13,12 @@ class EventVersion(IntEnum):
     R4_EVENT: 'EventVersion' = 300
     R5_EVENT: 'EventVersion' = 400
     EVTSept25: 'EventVersion' = 500
+    EV007: 'EventVersion' = 700
+    EV008: 'EventVersion' = 800
+    EV009: 'EventVersion' = 900
+    EV010: 'EventVersion' = 1000
+    EV011: 'EventVersion' = 1100
+    EV012: 'EventVersion' = 1200
 
 
 UNKNOWN = EventVersion.UNKNOWN
@@ -21,6 +27,12 @@ DEC_EVENT = EventVersion.DEC_EVENT
 R4_EVENT = EventVersion.R4_EVENT
 R5_EVENT = EventVersion.R5_EVENT
 EVTSept25 = EventVersion.EVTSept25
+EV007 = EventVersion.EV007
+EV008 = EventVersion.EV008
+EV009 = EventVersion.EV009
+EV010 = EventVersion.EV010
+EV011 = EventVersion.EV011
+EV012 = EventVersion.EV012
 
 
 class EventDefinition(Message):
@@ -35,6 +47,9 @@ class EventDefinition(Message):
     progress_rewards: 'RepeatedCompositeFieldContainer[EventProgressReward]'
     grace_period_end_date: 'LocalizedDateAndTimeData'
     last_revision_time: 'LocalizedDateAndTimeData'
+    base_event_id: 'str'
+    available_start_date: 'LocalizedDateAndTimeData'
+    available_end_date: 'LocalizedDateAndTimeData'
 
 
 class RewardPeriod(Message):
@@ -46,6 +61,7 @@ class RewardPeriod(Message):
     quests: 'RepeatedCompositeFieldContainer[Quest]'
     catch_up_periods: 'RepeatedCompositeFieldContainer[CatchUpPeriod]'
     max_xp: 'int'  # int64
+    rewards: 'RepeatedCompositeFieldContainer[Reward]'
 
 
 class Reward(Message):
@@ -53,6 +69,10 @@ class Reward(Message):
     reward_id: 'int'  # int64
     reward_type: 'RewardType'
     amount: 'int'  # int64
+    progress_id: 'int'  # uint32
+    type: 'ProgressType'
+    target_xp: 'int'  # int64
+    target_days_login: 'int'  # int64
 
 
 class EventProgressReward(Message):
@@ -68,6 +88,7 @@ class ProgressReward(Message):
     progress_id: 'int'  # uint32
     reward_unlocked: 'bool'
     reward_claimed: 'bool'
+    reward_id: 'int'  # int64
 
 
 class EventProgressResponse(Message):
@@ -77,6 +98,9 @@ class EventProgressResponse(Message):
         event_xp: 'int'  # int64
         progress: 'RepeatedCompositeFieldContainer[RewardPeriodProgress]'
         progress_rewards: 'RepeatedCompositeFieldContainer[ProgressReward]'
+        login_days_count: 'int'  # int64
+        last_login_count_time: 'LocalizedDateAndTimeData'
+        next_login_count_time: 'LocalizedDateAndTimeData'
 
     # __init__
     event_progress: 'RepeatedCompositeFieldContainer[EventProgressResponse.EventProgress]'
@@ -84,6 +108,9 @@ class EventProgressResponse(Message):
     event_xp: 'int'  # int64
     progress: 'RepeatedCompositeFieldContainer[RewardPeriodProgress]'
     progress_rewards: 'RepeatedCompositeFieldContainer[ProgressReward]'
+    login_days_count: 'int'  # int64
+    last_login_count_time: 'LocalizedDateAndTimeData'
+    next_login_count_time: 'LocalizedDateAndTimeData'
 
 
 class Quest(Message):

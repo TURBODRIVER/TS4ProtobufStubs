@@ -1,4 +1,4 @@
-from typing import TypeVar, Generic, List
+from typing import TypeVar, List, Sequence
 
 T = TypeVar('T')
 
@@ -68,7 +68,7 @@ class Message():
         pass
 
 
-class RepeatedCompositeFieldContainer(Generic[T]):
+class RepeatedCompositeFieldContainer(Sequence[T]):
     def __init__(self, message_listener, type_checker) -> 'None':
         self._message_listener = message_listener
         self._values: 'list'
