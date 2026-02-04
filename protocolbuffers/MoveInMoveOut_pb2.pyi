@@ -31,3 +31,4 @@ class MoveInMoveOutData(Message):
     travel_groups_to_update: 'RepeatedCompositeFieldContainer[int]'  # uint64
     retail_lots_to_update: 'RepeatedCompositeFieldContainer[int]'  # uint64
     notify_gameplay: 'bool'
+    is_evict: 'bool'

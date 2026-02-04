@@ -30,6 +30,15 @@ class RelationshipIndex(IntEnum):
     RELATIONSHIP_SIBLINGS_CHILDREN: 'RelationshipIndex' = 15
     RELATIONSHIP_PARENTS_SIBLING: 'RelationshipIndex' = 16
     RELATIONSHIP_COUSIN: 'RelationshipIndex' = 17
+    RELATIONSHIP_DISTANT_RELATIVE: 'RelationshipIndex' = 18
+    RELATIONSHIP_GREAT_GRANDPARENT: 'RelationshipIndex' = 19
+    RELATIONSHIP_GREAT_GRANDCHILD: 'RelationshipIndex' = 20
+    RELATIONSHIP_GRANDPARENT_SIBLING: 'RelationshipIndex' = 21
+    RELATIONSHIP_FIRST_COUSIN_ONCE_REMOVED: 'RelationshipIndex' = 22
+    RELATIONSHIP_SIBLINGS_GRANDCHILD: 'RelationshipIndex' = 23
+    RELATIONSHIP_SIBLINGS_GREAT_GRANDCHILD: 'RelationshipIndex' = 24
+    RELATIONSHIP_GREAT_GRANDPARENT_SIBLING: 'RelationshipIndex' = 25
+    RELATIONSHIP_HALF_SIBLING: 'RelationshipIndex' = 26
 
 
 RELATIONSHIP_MOTHER = RelationshipIndex.RELATIONSHIP_MOTHER
@@ -50,6 +59,15 @@ RELATIONSHIP_GRANDCHILD = RelationshipIndex.RELATIONSHIP_GRANDCHILD
 RELATIONSHIP_SIBLINGS_CHILDREN = RelationshipIndex.RELATIONSHIP_SIBLINGS_CHILDREN
 RELATIONSHIP_PARENTS_SIBLING = RelationshipIndex.RELATIONSHIP_PARENTS_SIBLING
 RELATIONSHIP_COUSIN = RelationshipIndex.RELATIONSHIP_COUSIN
+RELATIONSHIP_DISTANT_RELATIVE = RelationshipIndex.RELATIONSHIP_DISTANT_RELATIVE
+RELATIONSHIP_GREAT_GRANDPARENT = RelationshipIndex.RELATIONSHIP_GREAT_GRANDPARENT
+RELATIONSHIP_GREAT_GRANDCHILD = RelationshipIndex.RELATIONSHIP_GREAT_GRANDCHILD
+RELATIONSHIP_GRANDPARENT_SIBLING = RelationshipIndex.RELATIONSHIP_GRANDPARENT_SIBLING
+RELATIONSHIP_FIRST_COUSIN_ONCE_REMOVED = RelationshipIndex.RELATIONSHIP_FIRST_COUSIN_ONCE_REMOVED
+RELATIONSHIP_SIBLINGS_GRANDCHILD = RelationshipIndex.RELATIONSHIP_SIBLINGS_GRANDCHILD
+RELATIONSHIP_SIBLINGS_GREAT_GRANDCHILD = RelationshipIndex.RELATIONSHIP_SIBLINGS_GREAT_GRANDCHILD
+RELATIONSHIP_GREAT_GRANDPARENT_SIBLING = RelationshipIndex.RELATIONSHIP_GREAT_GRANDPARENT_SIBLING
+RELATIONSHIP_HALF_SIBLING = RelationshipIndex.RELATIONSHIP_HALF_SIBLING
 
 
 class PersistenceMaster(Message):
@@ -124,6 +142,7 @@ class PersistenceMaster(Message):
         HeirloomComponent: 'PersistenceMaster.DATA_TYPE' = 74
         PersistableFamilyRecipes: 'PersistenceMaster.DATA_TYPE' = 75
         PersistableTattooTracker: 'PersistenceMaster.DATA_TYPE' = 76
+        TravelDestinationComponent: 'PersistenceMaster.DATA_TYPE' = 77
 
     SimInfoAttribute = DATA_TYPE.SimInfoAttribute
     StateComponent = DATA_TYPE.StateComponent
@@ -195,6 +214,7 @@ class PersistenceMaster(Message):
     HeirloomComponent = DATA_TYPE.HeirloomComponent
     PersistableFamilyRecipes = DATA_TYPE.PersistableFamilyRecipes
     PersistableTattooTracker = DATA_TYPE.PersistableTattooTracker
+    TravelDestinationComponent = DATA_TYPE.TravelDestinationComponent
 
     class PersistableData():
         # __init__
@@ -271,6 +291,7 @@ class PersistenceMaster(Message):
             HeirloomComponent: 'PersistenceMaster.PersistableData.DATA_TYPE' = 74
             PersistableFamilyRecipes: 'PersistenceMaster.PersistableData.DATA_TYPE' = 75
             PersistableTattooTracker: 'PersistenceMaster.PersistableData.DATA_TYPE' = 76
+            TravelDestinationComponent: 'PersistenceMaster.PersistableData.DATA_TYPE' = 77
 
     # __init__
     data: 'RepeatedCompositeFieldContainer[PersistenceMaster.PersistableData]'
@@ -343,6 +364,7 @@ class LockData(Message):
     threshold_comparison: 'int'  # uint32
     buff_ids: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
     creature_types: 'RepeatedCompositeFieldContainer[int]'  # uint32
+    remove_sim_exception: 'bool'
 
 
 class PersistableStateComponent(Message):
@@ -757,6 +779,7 @@ class PersistablePregnancyTracker(Message):
     last_modified: 'int'  # uint64
     seed: 'int'  # uint32
     origin: 'int'  # uint32
+    chosen_partner_parent_id: 'int'  # fixed uint64
 
 
 class PersistableSimPermissions(Message):
@@ -1021,12 +1044,21 @@ class RelationshipTrope(Message):
     trope_id: 'int'  # uint64
 
 
+class ArchivedFamilyRelbit(Message):
+    # __init__
+    target_sim_id: 'int'  # uint64
+    relationship_bit_id: 'int'  # uint64
+    time_archived: 'int'  # uint64
+
+
 class PersistableGenealogyTracker(Message):
     persistable_data: 'PersistableGenealogyTracker'
 
     # __init__
     family_relations: 'RepeatedCompositeFieldContainer[FamilyRelation]'
     relationship_tropes: 'RepeatedCompositeFieldContainer[RelationshipTrope]'
+    archived_family_relbits: 'RepeatedCompositeFieldContainer[ArchivedFamilyRelbit]'
+    pinned_family_relbits: 'RepeatedCompositeFieldContainer[ArchivedFamilyRelbit]'
 
 
 class ObjectRelationship(Message):
@@ -1384,6 +1416,13 @@ class PersistableSituationSchedulerComponent(Message):
 
     # __init__
     situation_ids: 'RepeatedCompositeFieldContainer[int]'  # uint64
+
+
+class TravelDestinationComponent(Message):
+    persistable_data: 'TravelDestinationComponent'
+
+    # __init__
+    zone_id: 'int'  # uint64
 
 
 class MissionCreatedSituations(Message):
@@ -1815,25 +1854,3 @@ class PersistableTattooTracker(Message):
     body_type_tattoo_data: 'RepeatedCompositeFieldContainer[TattooData]'
     pending_tattoo_data: 'TattooData'
     stored_picked_tattoo: 'int'  # uint64
-
-
-class BucksData(Message):
-    class UnlockedPerk():
-        # __init__
-        perk: 'int'  # uint32
-        unlock_reason: 'int'  # uint32
-        time_left: 'int'  # uint64
-        timestamp: 'int'  # uint64
-        currently_unlocked: 'bool'
-
-    # __init__
-    bucks_type: 'int'  # uint32
-    amount: 'int'  # uint32
-    unlocked_perks: 'RepeatedCompositeFieldContainer[BucksData.UnlockedPerk]'
-    frozen_perk_ids: 'RepeatedCompositeFieldContainer[int]'  # uint64
-    frozen_business_rank_value: 'float'  # float32
-    perk: 'int'  # uint32
-    unlock_reason: 'int'  # uint32
-    time_left: 'int'  # uint64
-    timestamp: 'int'  # uint64
-    currently_unlocked: 'bool'

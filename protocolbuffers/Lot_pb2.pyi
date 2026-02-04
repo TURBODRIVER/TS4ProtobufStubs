@@ -25,6 +25,8 @@ class LotInfoItem(Message):
     related_household: 'bool'
     is_premade_custom_schedule: 'bool'
     custom_schedule_name_key: 'LocalizedString'
+    priority: 'int'  # int32
+    requires_objects_text: 'LocalizedString'
 
 
 class LotPlexExteriorUpdate(Message):

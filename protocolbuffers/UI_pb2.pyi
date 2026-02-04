@@ -7,6 +7,7 @@ from protocolbuffers.Sparse_pb2 import *
 from protocolbuffers.ResourceKey_pb2 import *
 from protocolbuffers.Localization_pb2 import *
 from protocolbuffers.Math_pb2 import *
+from protocolbuffers.S4Common_pb2 import *
 
 
 class BookCategoryDisplayType(IntEnum):
@@ -156,6 +157,7 @@ class IconInfo(Message):
     multicolor: 'RepeatedCompositeFieldContainer[Vector3]'
     main_objective: 'LocalizedString'
     parent_id: 'int'  # fixed uint64
+    icon_background: 'ResourceKey'
 
 
 class InventoryUpdate(Message):
@@ -223,11 +225,13 @@ class InventoryItemUpdate(Message):
         TYPE_UPDATE: 'InventoryItemUpdate.UpdateType' = 1
         TYPE_REMOVE: 'InventoryItemUpdate.UpdateType' = 2
         TYPE_SET_STACK_OPTION: 'InventoryItemUpdate.UpdateType' = 3
+        TYPE_SET_VALUE: 'InventoryItemUpdate.UpdateType' = 4
 
     TYPE_ADD = UpdateType.TYPE_ADD
     TYPE_UPDATE = UpdateType.TYPE_UPDATE
     TYPE_REMOVE = UpdateType.TYPE_REMOVE
     TYPE_SET_STACK_OPTION = UpdateType.TYPE_SET_STACK_OPTION
+    TYPE_SET_VALUE = UpdateType.TYPE_SET_VALUE
 
     class InventoryType(IntEnum):
         TYPE_OBJECT: 'InventoryItemUpdate.InventoryType' = 0
@@ -527,6 +531,21 @@ class TravelViewHouseholdsInfo(Message):
     household_locations: 'RepeatedCompositeFieldContainer[HouseholdLocationStatus]'
 
 
+class NotebookSecretScandalMessage(Message):
+    # __init__
+    secret_status: 'LocalizedString'
+    expiration_text: 'LocalizedString'
+    expiration_seconds: 'int'  # uint64
+    complicit_sim_id: 'int'  # fixed uint64
+    secret_holder_sim_id: 'int'  # fixed uint64
+    severity: 'IconInfo'
+    blackmailers: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    confidantes: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    scandal_effects: 'LocalizedString'
+    secret_owner_sim_id: 'int'  # fixed uint64
+    secret_id: 'int'  # fixed uint64
+
+
 class NotebookEntryListMessage(Message):
     # __init__
     item_message: 'LocalizedString'
@@ -538,6 +557,19 @@ class NotebookEntryListMessage(Message):
 
 
 class NotebookEntryMessage(Message):
+    class NotebookEntryType(IntEnum):
+        NONE: 'NotebookEntryMessage.NotebookEntryType' = 0
+        MY_SECRET: 'NotebookEntryMessage.NotebookEntryType' = 1
+        MY_SCANDAL: 'NotebookEntryMessage.NotebookEntryType' = 2
+        OTHERS_SECRET: 'NotebookEntryMessage.NotebookEntryType' = 3
+        OTHERS_SCANDAL: 'NotebookEntryMessage.NotebookEntryType' = 4
+
+    NONE = NotebookEntryType.NONE
+    MY_SECRET = NotebookEntryType.MY_SECRET
+    MY_SCANDAL = NotebookEntryType.MY_SCANDAL
+    OTHERS_SECRET = NotebookEntryType.OTHERS_SECRET
+    OTHERS_SCANDAL = NotebookEntryType.OTHERS_SCANDAL
+
     # __init__
     entry_message: 'LocalizedString'
     entry_icon: 'IconInfo'
@@ -550,6 +582,8 @@ class NotebookEntryMessage(Message):
     is_sortable: 'bool'
     is_new_item_sortable: 'bool'
     entry_message_description: 'LocalizedString'
+    entry_type: 'NotebookEntryMessage.NotebookEntryType'
+    secret_scandal_data: 'NotebookSecretScandalMessage'
 
 
 class NotebookSubCategoryMessage(Message):
@@ -558,11 +592,13 @@ class NotebookSubCategoryMessage(Message):
         NOTEBOOK_NUMBERED: 'NotebookSubCategoryMessage.NotebookEntryStyle' = 1
         NOTEBOOK_ICON_DESCRIPTION: 'NotebookSubCategoryMessage.NotebookEntryStyle' = 2
         NOTEBOOK_EXPANDABLE_SINGLE: 'NotebookSubCategoryMessage.NotebookEntryStyle' = 3
+        NOTEBOOK_EXPANDABLE_SECRET_SCANDAL: 'NotebookSubCategoryMessage.NotebookEntryStyle' = 4
 
     NOTEBOOK_EXPANDABLE = NotebookEntryStyle.NOTEBOOK_EXPANDABLE
     NOTEBOOK_NUMBERED = NotebookEntryStyle.NOTEBOOK_NUMBERED
     NOTEBOOK_ICON_DESCRIPTION = NotebookEntryStyle.NOTEBOOK_ICON_DESCRIPTION
     NOTEBOOK_EXPANDABLE_SINGLE = NotebookEntryStyle.NOTEBOOK_EXPANDABLE_SINGLE
+    NOTEBOOK_EXPANDABLE_SECRET_SCANDAL = NotebookEntryStyle.NOTEBOOK_EXPANDABLE_SECRET_SCANDAL
 
     # __init__
     subcategory_name: 'LocalizedString'
@@ -584,6 +620,7 @@ class NotebookCategoryMessage(Message):
     category_description: 'LocalizedString'
     enum_name: 'str'
     category_large_icon: 'IconInfo'
+    display_subcategory_title: 'bool'
 
 
 class NotebookView(Message):
@@ -1036,6 +1073,15 @@ class ShowHorseCompetitionSelector(Message):
     competition_metadatas: 'RepeatedCompositeFieldContainer[HorseCompetitionMetadata]'
 
 
+class ShowSimCompetitionSelector(Message):
+    # __init__
+    is_update: 'bool'
+    selected_sim: 'SimCompetitionAssigneeData'
+    competition_metadatas: 'RepeatedCompositeFieldContainer[SimCompetitionMetadata]'
+    selected_object: 'SimCompetitionObjectData'
+    category: 'int'  # uint32
+
+
 class ShowMatchmakingDialog(Message):
     # __init__
     sim_id: 'int'  # fixed uint64
@@ -1117,6 +1163,46 @@ class ShowHorseCompetitionResults(Message):
     # __init__
     sim_id: 'int'  # fixed uint64
     horse_id: 'int'  # fixed uint64
+    competition_id: 'int'  # fixed uint64
+    placement: 'int'  # int32
+    unlocked_new_competition: 'bool'
+    unlocked_competition_id: 'int'  # fixed uint64
+
+
+class SimCompetitionMetadata(Message):
+    # __init__
+    competition_id: 'int'  # fixed uint64
+    eligible_to_compete: 'bool'
+    not_eligible_reason: 'LocalizedString'
+    has_placed_previously: 'bool'
+    highest_placement: 'int'  # int32
+
+
+class SimCompetitionAssigneeSkillData(Message):
+    # __init__
+    skill_id: 'int'  # fixed uint64
+    level: 'int'  # uint32
+
+
+class SimCompetitionAssigneeData(Message):
+    # __init__
+    sim_id: 'int'  # fixed uint64
+    mood_id: 'int'  # fixed uint64
+    mood_intensity: 'int'  # uint32
+    mood_tooltip: 'LocalizedString'
+    skills: 'RepeatedCompositeFieldContainer[SimCompetitionAssigneeSkillData]'
+
+
+class SimCompetitionObjectData(Message):
+    # __init__
+    selected_object_id: 'int'  # fixed uint64
+    icon: 'IconInfo'
+    name: 'LocalizedString'
+
+
+class ShowSimCompetitionResults(Message):
+    # __init__
+    sim_id: 'int'  # fixed uint64
     competition_id: 'int'  # fixed uint64
     placement: 'int'  # int32
     unlocked_new_competition: 'bool'
@@ -1213,3 +1299,116 @@ class CheatSheetElement(Message):
     element_type: 'int'  # int32
     keyframe: 'str'
     control: 'LocalizedString'
+
+
+class FamilyTreeForgeryPath(Message):
+    # __init__
+    sim_ids: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    forged_to_next_states: 'RepeatedCompositeFieldContainer[bool]'
+
+
+class FamilyTreeForgeryRelationOptions(Message):
+    # __init__
+    relbit_ids: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    possible_paths: 'RepeatedCompositeFieldContainer[FamilyTreeForgeryPath]'
+
+
+class ShowFamilyTreeForgery(Message):
+    # __init__
+    origin_sim_id: 'int'  # fixed uint64
+    target_sim_id: 'int'  # fixed uint64
+    all_possible_relations: 'RepeatedCompositeFieldContainer[FamilyTreeForgeryRelationOptions]'
+    path_sim_from_picker: 'int'  # fixed uint64
+    forger_sim_id: 'int'  # fixed uint64
+
+
+class ShowDynastyConfigurator(Message):
+    # __init__
+    view_type: 'int'  # int32
+    predefined_members: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    first_spouse: 'int'  # fixed uint64
+    second_spouse: 'int'  # fixed uint64
+    dynasty_id: 'int'  # fixed uint64
+    raw_eligible_sim_count: 'int'  # int32
+
+
+class DynastyMemberBreakdowns(Message):
+    # __init__
+    member_id: 'int'  # fixed uint64
+    member_rank: 'int'  # int32
+    is_black_sheep: 'bool'
+    member_pose: 'int'  # int32
+    is_poor_performer: 'bool'
+    trait_values: 'RepeatedCompositeFieldContainer[DynastyValueDetailData]'
+    career_values: 'RepeatedCompositeFieldContainer[DynastyValueDetailData]'
+
+
+class DynastyValueDetailData(Message):
+    # __init__
+    id: 'int'  # uint64
+    dynasty_value: 'LocalizedString'
+    is_aligned: 'bool'
+
+
+class DynastyValues(Message):
+    # __init__
+    value_id: 'int'  # fixed uint64
+    value_name: 'LocalizedString'
+    value_type: 'int'  # uint64
+    value_icon: 'IconInfo'
+    value_tooltip: 'LocalizedString'
+
+
+class DynastyAlliesRivals(Message):
+    # __init__
+    alliances: 'RepeatedCompositeFieldContainer[DynastySimpleData]'
+    rivalries: 'RepeatedCompositeFieldContainer[DynastySimpleData]'
+
+
+class DynastySimpleData(Message):
+    # __init__
+    dynasty_id: 'int'  # fixed uint64
+    name: 'str'
+    icon: 'IconInfo'
+    icon_background: 'IconInfo'
+    prestige_level: 'int'  # int32
+    number_members: 'int'  # int32
+
+
+class DynastyUIData(Message):
+    # __init__
+    dynasty_id: 'int'  # fixed uint64
+    name: 'str'
+    icon: 'IconInfo'
+    head_sim_id: 'int'  # fixed uint64
+    heir_sim_id: 'int'  # fixed uint64
+    members: 'RepeatedCompositeFieldContainer[DynastyMemberBreakdowns]'
+    values: 'RepeatedCompositeFieldContainer[DynastyValues]'
+    alliances: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    rivalries: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    description: 'str'
+    icon_background: 'IconInfo'
+    prestige_level: 'int'  # int32
+    bucks_data: 'RepeatedCompositeFieldContainer[BucksData]'
+
+
+class ScandalSecretSimpleData(Message):
+    # __init__
+    secret_id: 'int'  # fixed uint64
+    name: 'LocalizedString'
+    description: 'LocalizedString'
+    icon: 'IconInfo'
+    status_id: 'int'  # int32
+    expiration_date: 'int'  # fixed uint64
+
+
+class ScandalSecretData(Message):
+    # __init__
+    secrets: 'RepeatedCompositeFieldContainer[ScandalSecretSimpleData]'
+    scandals: 'RepeatedCompositeFieldContainer[ScandalSecretSimpleData]'
+
+
+class ShowFamilyTreeUI(Message):
+    # __init__
+    sim_id: 'int'  # fixed uint64
+    pov_sim_id: 'int'  # fixed uint64

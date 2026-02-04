@@ -164,11 +164,13 @@ class Schedule(Message):
         MORNING: 'Schedule.ScheduleShiftType' = 1
         EVENING: 'Schedule.ScheduleShiftType' = 2
         MULTI_DAY: 'Schedule.ScheduleShiftType' = 3
+        TWENTY_FOUR_HOURS: 'Schedule.ScheduleShiftType' = 4
 
     ALL_DAY = ScheduleShiftType.ALL_DAY
     MORNING = ScheduleShiftType.MORNING
     EVENING = ScheduleShiftType.EVENING
     MULTI_DAY = ScheduleShiftType.MULTI_DAY
+    TWENTY_FOUR_HOURS = ScheduleShiftType.TWENTY_FOUR_HOURS
 
     class ScheduleEntry():
         # __init__
@@ -194,6 +196,7 @@ class Schedule(Message):
             MORNING: 'Schedule.ScheduleEntry.ScheduleShiftType' = 1
             EVENING: 'Schedule.ScheduleEntry.ScheduleShiftType' = 2
             MULTI_DAY: 'Schedule.ScheduleEntry.ScheduleShiftType' = 3
+            TWENTY_FOUR_HOURS: 'Schedule.ScheduleEntry.ScheduleShiftType' = 4
 
     # __init__
     schedule_entries: 'RepeatedCompositeFieldContainer[ScheduleEntry]'
@@ -230,3 +233,25 @@ class SimPronoun(Message):
 class SimPronounList(Message):
     # __init__
     pronouns: 'RepeatedCompositeFieldContainer[SimPronoun]'
+
+
+class BucksData(Message):
+    class UnlockedPerk():
+        # __init__
+        perk: 'int'  # uint32
+        unlock_reason: 'int'  # uint32
+        time_left: 'int'  # uint64
+        timestamp: 'int'  # uint64
+        currently_unlocked: 'bool'
+
+    # __init__
+    bucks_type: 'int'  # uint32
+    amount: 'int'  # uint32
+    unlocked_perks: 'RepeatedCompositeFieldContainer[UnlockedPerk]'
+    frozen_perk_ids: 'RepeatedCompositeFieldContainer[int]'  # uint64
+    frozen_business_rank_value: 'float'  # float32
+    perk: 'int'  # uint32
+    unlock_reason: 'int'  # uint32
+    time_left: 'int'  # uint64
+    timestamp: 'int'  # uint64
+    currently_unlocked: 'bool'

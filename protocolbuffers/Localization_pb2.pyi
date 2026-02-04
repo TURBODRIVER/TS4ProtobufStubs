@@ -60,6 +60,8 @@ class LocalizedStringToken(Message):
     age_flags: 'int'  # uint32
     sim_id: 'int'  # uint64
     packed_pronouns: 'str'
+    name_prefix_key: 'int'  # uint32
+    name_prefix_string: 'str'
     text_string: 'LocalizedString'
     number: 'float'  # float32
     persona_id: 'int'  # uint64

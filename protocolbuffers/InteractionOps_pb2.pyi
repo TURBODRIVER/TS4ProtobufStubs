@@ -97,6 +97,7 @@ class TravelSimsToZone(Message):
     zone_id: 'int'  # fixed uint64
     sim_ids: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
     active_sim_id: 'int'  # fixed uint64
+    spawn_object_id: 'int'  # uint64
 
 
 class CASAvailableZonesInfo(Message):

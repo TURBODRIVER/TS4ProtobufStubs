@@ -7,6 +7,7 @@ from protocolbuffers.ResourceKey_pb2 import *
 from protocolbuffers.Localization_pb2 import *
 from protocolbuffers.SimObjectAttributes_pb2 import *
 from protocolbuffers.Clubs_pb2 import *
+from protocolbuffers.S4Common_pb2 import *
 
 
 class ReviewIconData(Message):

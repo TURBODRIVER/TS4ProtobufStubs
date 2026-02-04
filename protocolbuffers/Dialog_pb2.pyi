@@ -56,6 +56,9 @@ class UiDialogChoiceMessage(Message):
         SHOW_SMALL_BUSINESS_PANEL: 'UiDialogChoiceMessage.UiDialogChoiceUiRequest' = 36
         SHOW_BUILD_BUY_WITH_FILTER: 'UiDialogChoiceMessage.UiDialogChoiceUiRequest' = 37
         SHOW_SMALL_BUSINESS_CONFIGURATOR: 'UiDialogChoiceMessage.UiDialogChoiceUiRequest' = 38
+        SHOW_NOBILITY_PERKS_PANEL: 'UiDialogChoiceMessage.UiDialogChoiceUiRequest' = 39
+        SHOW_DYNASTY_PANEL: 'UiDialogChoiceMessage.UiDialogChoiceUiRequest' = 40
+        SHOW_DYNASTY_PERKS_PANEL: 'UiDialogChoiceMessage.UiDialogChoiceUiRequest' = 41
 
     NO_REQUEST = UiDialogChoiceUiRequest.NO_REQUEST
     SHOW_LESSONS = UiDialogChoiceUiRequest.SHOW_LESSONS
@@ -96,6 +99,9 @@ class UiDialogChoiceMessage(Message):
     SHOW_SMALL_BUSINESS_PANEL = UiDialogChoiceUiRequest.SHOW_SMALL_BUSINESS_PANEL
     SHOW_BUILD_BUY_WITH_FILTER = UiDialogChoiceUiRequest.SHOW_BUILD_BUY_WITH_FILTER
     SHOW_SMALL_BUSINESS_CONFIGURATOR = UiDialogChoiceUiRequest.SHOW_SMALL_BUSINESS_CONFIGURATOR
+    SHOW_NOBILITY_PERKS_PANEL = UiDialogChoiceUiRequest.SHOW_NOBILITY_PERKS_PANEL
+    SHOW_DYNASTY_PANEL = UiDialogChoiceUiRequest.SHOW_DYNASTY_PANEL
+    SHOW_DYNASTY_PERKS_PANEL = UiDialogChoiceUiRequest.SHOW_DYNASTY_PERKS_PANEL
 
     # __init__
     choice_id: 'int'  # uint32
@@ -327,6 +333,7 @@ class UiDialogMessage(Message):
     mask_alert_sim_name: 'LocalizedString'
     mask_header_icon: 'IconInfo'
     validation_command: 'str'
+    show_dialog_message_override: 'str'
 
 
 class UiDialogResponseMessage(Message):
@@ -483,6 +490,8 @@ class ObjectPickerRowData(Message):
     owner_sim_id: 'int'  # uint64
     is_new: 'bool'
     target_sim_id: 'int'  # uint64
+    status_icons: 'RepeatedCompositeFieldContainer[IconInfo]'
+    dynasty_icon: 'IconInfo'
 
 
 class OutfitPickerRowData(Message):
@@ -542,6 +551,14 @@ class RecipePickerData(Message):
     display_ingredient_check: 'bool'
     display_funds: 'bool'
     display_prepped_ingredient_check: 'bool'
+    use_ingredients_text_override: 'LocalizedString'
+
+
+class SimPickerCustomFilter(Message):
+    # __init__
+    filter_value: 'int'  # uint32
+    icon_info: 'IconInfo'
+    tooltip: 'LocalizedString'
 
 
 class SimPickerData(Message):
@@ -554,6 +571,7 @@ class SimPickerData(Message):
     cell_type: 'int'  # uint32
     display_filter: 'bool'
     override_owner_relationships: 'RepeatedCompositeFieldContainer[RelationshipUpdate]'
+    custom_filters: 'RepeatedCompositeFieldContainer[SimPickerCustomFilter]'
 
 
 class ObjectPickerData(Message):
@@ -658,6 +676,7 @@ class UiDialogPicker(Message):
         RELATIONSHIP: 'UiDialogPicker.ObjectPickerType' = 24
         OBJECT_EXPANDED_INFO: 'UiDialogPicker.ObjectPickerType' = 25
         OBJECT_CAS_ICON: 'UiDialogPicker.ObjectPickerType' = 26
+        OBJECT_ICON_TITLE: 'UiDialogPicker.ObjectPickerType' = 27
 
     RECIPE = ObjectPickerType.RECIPE
     INTERACTION = ObjectPickerType.INTERACTION
@@ -685,6 +704,7 @@ class UiDialogPicker(Message):
     RELATIONSHIP = ObjectPickerType.RELATIONSHIP
     OBJECT_EXPANDED_INFO = ObjectPickerType.OBJECT_EXPANDED_INFO
     OBJECT_CAS_ICON = ObjectPickerType.OBJECT_CAS_ICON
+    OBJECT_ICON_TITLE = ObjectPickerType.OBJECT_ICON_TITLE
 
     class DescriptionDisplay(IntEnum):
         DEFAULT: 'UiDialogPicker.DescriptionDisplay' = 1
@@ -909,6 +929,10 @@ class SimPersonalityAssignmentDialog(Message):
     previous_skill_ids: 'RepeatedCompositeFieldContainer[int]'  # uint64
     unlocked_trait_ids: 'RepeatedCompositeFieldContainer[int]'  # uint64
     age_up_reward_trait_text: 'LocalizedString'
+    parent_pregnancy_partner_id: 'int'  # uint64
+    parent_partner_id: 'int'  # uint64
+    pregnancy_parent_id: 'int'  # uint64
+    parent_partner_relbit_id: 'int'  # uint64
 
 
 class RetailSummaryDialog(Message):

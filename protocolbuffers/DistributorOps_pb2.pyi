@@ -15,6 +15,7 @@ from protocolbuffers.S4Common_pb2 import *
 from protocolbuffers.Outfits_pb2 import *
 from protocolbuffers.UI_pb2 import *
 from protocolbuffers.Business_pb2 import *
+from protocolbuffers.Kingdom_pb2 import *
 
 
 class Operation(Message):
@@ -253,6 +254,7 @@ class Operation(Message):
         SET_PACKED_PRONOUNS: 'Operation.Type' = 235
         TRAIT_APPEARANCE_UPDATE: 'Operation.Type' = 236
         BOUND_OBJECT_UPDATE: 'Operation.Type' = 237
+        DISPLAY_FAMILY_TREE: 'Operation.Type' = 238
         SET_OCCULT_TYPES: 'Operation.Type' = 250
         SET_CURRENT_OCCULT_TYPES: 'Operation.Type' = 251
         NOTEBOOK_VIEW: 'Operation.Type' = 252
@@ -449,6 +451,17 @@ class Operation(Message):
         CUSTOM_SCHEDULE_SET_AVAILABLE_SIMS: 'Operation.Type' = 1309
         SET_VISIBILITY_IMMEDIATE: 'Operation.Type' = 1310
         SET_RESIDENT_LIST: 'Operation.Type' = 1311
+        KINGDOM_UPDATE: 'Operation.Type' = 1320
+        SEND_DYNASTY_INFO: 'Operation.Type' = 1321
+        KINGDOM_SEND_AVAILABLE_DECREES: 'Operation.Type' = 1322
+        SET_PLUMBBOB_ENSEMBLE_TEXTURE: 'Operation.Type' = 1323
+        SET_PLUMBBOB_ENSEMBLE_TINT: 'Operation.Type' = 1324
+        SEND_SCANDAL_SECRET_INFO: 'Operation.Type' = 1325
+        SET_DYNASTY_NAME_DESCRIPTION_KEY: 'Operation.Type' = 1326
+        SHOW_SIM_COMPETITION_SELECTOR: 'Operation.Type' = 1327
+        SHOW_SIM_COMPETITION_RESULTS: 'Operation.Type' = 1328
+        KINGDOM_REQUEST_DEFAULT_PRONOUNS: 'Operation.Type' = 1329
+        SET_ANCESTORS_DATA: 'Operation.Type' = 1330
 
     OBJECT_DELETE = Type.OBJECT_DELETE
     SET_TRANSFORM = Type.SET_TRANSFORM
@@ -684,6 +697,7 @@ class Operation(Message):
     SET_PACKED_PRONOUNS = Type.SET_PACKED_PRONOUNS
     TRAIT_APPEARANCE_UPDATE = Type.TRAIT_APPEARANCE_UPDATE
     BOUND_OBJECT_UPDATE = Type.BOUND_OBJECT_UPDATE
+    DISPLAY_FAMILY_TREE = Type.DISPLAY_FAMILY_TREE
     SET_OCCULT_TYPES = Type.SET_OCCULT_TYPES
     SET_CURRENT_OCCULT_TYPES = Type.SET_CURRENT_OCCULT_TYPES
     NOTEBOOK_VIEW = Type.NOTEBOOK_VIEW
@@ -880,6 +894,17 @@ class Operation(Message):
     CUSTOM_SCHEDULE_SET_AVAILABLE_SIMS = Type.CUSTOM_SCHEDULE_SET_AVAILABLE_SIMS
     SET_VISIBILITY_IMMEDIATE = Type.SET_VISIBILITY_IMMEDIATE
     SET_RESIDENT_LIST = Type.SET_RESIDENT_LIST
+    KINGDOM_UPDATE = Type.KINGDOM_UPDATE
+    SEND_DYNASTY_INFO = Type.SEND_DYNASTY_INFO
+    KINGDOM_SEND_AVAILABLE_DECREES = Type.KINGDOM_SEND_AVAILABLE_DECREES
+    SET_PLUMBBOB_ENSEMBLE_TEXTURE = Type.SET_PLUMBBOB_ENSEMBLE_TEXTURE
+    SET_PLUMBBOB_ENSEMBLE_TINT = Type.SET_PLUMBBOB_ENSEMBLE_TINT
+    SEND_SCANDAL_SECRET_INFO = Type.SEND_SCANDAL_SECRET_INFO
+    SET_DYNASTY_NAME_DESCRIPTION_KEY = Type.SET_DYNASTY_NAME_DESCRIPTION_KEY
+    SHOW_SIM_COMPETITION_SELECTOR = Type.SHOW_SIM_COMPETITION_SELECTOR
+    SHOW_SIM_COMPETITION_RESULTS = Type.SHOW_SIM_COMPETITION_RESULTS
+    KINGDOM_REQUEST_DEFAULT_PRONOUNS = Type.KINGDOM_REQUEST_DEFAULT_PRONOUNS
+    SET_ANCESTORS_DATA = Type.SET_ANCESTORS_DATA
 
     # __init__
     type: 'Operation.Type'
@@ -1189,6 +1214,13 @@ class SetBreedNameKey(Message):
 class SetBusinessNameAndDescriptionKey(Message):
     # __init__
     sim_id: 'int'  # uint64
+    name_key: 'int'  # uint32
+    description_key: 'int'  # uint32
+
+
+class SetDynastyNameAndDescriptionKey(Message):
+    # __init__
+    dynasty_id: 'int'  # uint64
     name_key: 'int'  # uint32
     description_key: 'int'  # uint32
 
@@ -1838,6 +1870,21 @@ class SetCareer(Message):
     workplace_rival_id: 'int'  # uint64
     burnout: 'bool'
     small_business_career_data: 'RepeatedCompositeFieldContainer[SmallBusinessCareerData]'
+    enable_infants_tray_button: 'bool'
+
+
+class VirtualCareerExtraData(Message):
+    # __init__
+    key: 'str'
+    value: 'str'
+
+
+class VirtualCareer(Message):
+    # __init__
+    sim_id: 'int'  # fixed uint64
+    career_panel_type: 'int'  # uint32
+    show_when_no_careers: 'bool'
+    extra_data: 'RepeatedCompositeFieldContainer[VirtualCareerExtraData]'
 
 
 class SetCareers(Message):
@@ -1845,6 +1892,7 @@ class SetCareers(Message):
     careers: 'RepeatedCompositeFieldContainer[SetCareer]'
     custom_name: 'str'
     custom_description: 'str'
+    virtual_careers: 'RepeatedCompositeFieldContainer[VirtualCareer]'
 
 
 class SmallBusinessCareerData(Message):
@@ -1951,6 +1999,7 @@ class TravelLiveToNhdToLive(Message):
     # __init__
     sim_to_control_id: 'int'  # uint64
     household_to_control_id: 'int'  # uint64
+    override_zone_to_load: 'int'  # uint64
 
 
 class SetPrimaryAspiration(Message):
@@ -2247,6 +2296,38 @@ class ShowFamilyTree(Message):
     grandchildren: 'RepeatedCompositeFieldContainer[ShowFamilyTree.FamilyTreeNode]'
     divorced_spouses: 'RepeatedCompositeFieldContainer[ShowFamilyTree.FamilyTreeNode]'
     dead_spouses: 'RepeatedCompositeFieldContainer[ShowFamilyTree.FamilyTreeNode]'
+
+
+class FamilyTreeServiceNode(Message):
+    # __init__
+    sim_id: 'int'  # fixed uint64
+    spouse: 'int'  # fixed uint64
+    fiance: 'int'  # fixed uint64
+    steady_relationships: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    parents: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    children: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    siblings: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    divorced_spouses: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    dead_spouses: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    bit_id: 'int'  # fixed uint64
+    is_adopted: 'bool'
+    localized_full_name: 'LocalizedString'
+    first_name: 'str'
+    last_name: 'str'
+    thumbnail_override: 'ResourceKey'
+    death_trait_id_override: 'int'  # uint64
+    gender: 'int'  # uint32
+    sims_connected_by_forgery: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    is_forged: 'bool'
+    known_secret_parents: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    known_secret_children: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    dead_kingdom_data: 'FamilyTreeNodeKingdomData'
+
+
+class DisplayFamilyTree(Message):
+    # __init__
+    root_id: 'int'  # fixed uint64
+    family_nodes: 'RepeatedCompositeFieldContainer[FamilyTreeServiceNode]'
 
 
 class CustomizableObjectData(Message):
@@ -2684,6 +2765,18 @@ class SetHouseholdInventoryRewards(Message):
     reward_part_list: 'RewardPartList'
 
 
+class AncestorData(Message):
+    # __init__
+    sim_id: 'int'  # uint64
+    full_name: 'int'  # uint32
+    thumbnail_id: 'ResourceKey'
+
+
+class SetAncestorsData(Message):
+    # __init__
+    ancestors: 'RepeatedCompositeFieldContainer[AncestorData]'
+
+
 class ChildhoodInspirationCompleteStateUpdate(Message):
     # __init__
     sim_id: 'int'  # uint64
@@ -2693,3 +2786,52 @@ class ChildhoodInspirationCompleteStateUpdate(Message):
 class SetResidentList(Message):
     # __init__
     sim_ids: 'RepeatedCompositeFieldContainer[int]'  # uint64
+
+
+class DynastyInfo(Message):
+    class DynastyMessageType(IntEnum):
+        ADD: 'DynastyInfo.DynastyMessageType' = 0
+        REMOVE: 'DynastyInfo.DynastyMessageType' = 1
+        UPDATE: 'DynastyInfo.DynastyMessageType' = 2
+        UPDATE_MEMBERS_RANK: 'DynastyInfo.DynastyMessageType' = 3
+
+    ADD = DynastyMessageType.ADD
+    REMOVE = DynastyMessageType.REMOVE
+    UPDATE = DynastyMessageType.UPDATE
+    UPDATE_MEMBERS_RANK = DynastyMessageType.UPDATE_MEMBERS_RANK
+
+    # __init__
+    message_type: 'DynastyInfo.DynastyMessageType'
+    dynasties: 'RepeatedCompositeFieldContainer[DynastyUIData]'
+    active_sim_id: 'int'  # uint64
+
+
+class KingdomSendAvailableDecrees(Message):
+    # __init__
+    decrees: 'RepeatedCompositeFieldContainer[KingdomDecree]'
+    enacted_decrees: 'RepeatedCompositeFieldContainer[int]'  # uint32
+
+
+class ScandalSecretInfo(Message):
+    class ScandalSecretMessageType(IntEnum):
+        ADD: 'ScandalSecretInfo.ScandalSecretMessageType' = 0
+        REMOVE: 'ScandalSecretInfo.ScandalSecretMessageType' = 1
+        UPDATE: 'ScandalSecretInfo.ScandalSecretMessageType' = 2
+
+    ADD = ScandalSecretMessageType.ADD
+    REMOVE = ScandalSecretMessageType.REMOVE
+    UPDATE = ScandalSecretMessageType.UPDATE
+
+    class SecretOwnership(IntEnum):
+        MY_SECRET: 'ScandalSecretInfo.SecretOwnership' = 0
+        OTHERS_SECRET: 'ScandalSecretInfo.SecretOwnership' = 1
+
+    MY_SECRET = SecretOwnership.MY_SECRET
+    OTHERS_SECRET = SecretOwnership.OTHERS_SECRET
+
+    # __init__
+    message_type: 'ScandalSecretInfo.ScandalSecretMessageType'
+    secret_ownership: 'ScandalSecretInfo.SecretOwnership'
+    secret_owner_id: 'int'  # fixed uint64
+    secret_keeper_id: 'int'  # fixed uint64
+    scandal_secret: 'ScandalSecretSimpleData'

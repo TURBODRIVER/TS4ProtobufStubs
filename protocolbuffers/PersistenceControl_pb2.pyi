@@ -5,6 +5,7 @@ from protocolbuffers.Consts_pb2 import *
 from protocolbuffers.FileSerialization_pb2 import *
 from protocolbuffers.SimObjectAttributes_pb2 import *
 from protocolbuffers.GameplaySaveData_pb2 import *
+from protocolbuffers.Kingdom_pb2 import *
 
 
 class CASInfoDataFragment(Message):
@@ -31,6 +32,7 @@ class NeighborhoodInfoCacheFragment(Message):
     gameplay_data: 'GameplaySaveSlotData'
     zones: 'RepeatedCompositeFieldContainer[ZoneData]'
     neighborhoods: 'RepeatedCompositeFieldContainer[NeighborhoodData]'
+    kingdom_service: 'PersistableKingdomService'
 
 
 class SimDataFragment(Message):

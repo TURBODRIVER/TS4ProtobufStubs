@@ -8,6 +8,7 @@ from protocolbuffers.UI_pb2 import *
 from protocolbuffers.Lot_pb2 import *
 from protocolbuffers.Math_pb2 import *
 from protocolbuffers.CustomSchedule_pb2 import *
+from protocolbuffers.Dialog_pb2 import *
 
 
 class SimPickerItem(Message):
@@ -37,6 +38,7 @@ class SituationEditData(Message):
     recurring_days: 'RepeatedCompositeFieldContainer[int]'  # uint32
     end_time: 'int'  # uint64
     has_valid_zone_schedule: 'bool'
+    apply_appearance_modifier: 'bool'
 
 
 class SituationPrepare(Message):
@@ -99,7 +101,9 @@ class SituationStyleData(Message):
     cas_edit_job_id: 'int'  # uint64
     cas_edit_outfit_category: 'int'  # uint32
     cas_edit_no_sim_icon: 'ResourceKey'
-    visible_on_role_page: 'bool'
+    guest_attire_visible_on_role_page: 'bool'
+    appearance_modifier_text: 'LocalizedString'
+    outfit_selector_visible_on_role_page: 'bool'
 
 
 class SituationData(Message):
@@ -169,6 +173,7 @@ class SituationJobSim(Message):
     career_track_id: 'int'  # fixed uint64
     cell_disabled: 'bool'
     cell_disabled_tooltip: 'LocalizedString'
+    tag_list: 'RepeatedCompositeFieldContainer[int]'  # uint32
 
 
 class SituationJobSims(Message):
@@ -179,6 +184,7 @@ class SituationJobSims(Message):
     lock_selection: 'bool'
     sims: 'RepeatedCompositeFieldContainer[SituationJobSim]'
     requirements: 'LocalizedString'
+    custom_filters: 'RepeatedCompositeFieldContainer[SimPickerCustomFilter]'
 
 
 class SituationLocations(Message):
@@ -324,6 +330,7 @@ class SituationGoal(Message):
     expiration_time: 'int'  # uint64
     ui_element: 'int'  # uint64
     mtx_bundle_id: 'int'  # uint64
+    goal_guid: 'int'  # uint64
 
 
 class SituationGoalsUpdate(Message):
@@ -457,3 +464,4 @@ class QuestGoalUpdate(Message):
     live_event_id: 'int'  # uint64
     quest_id: 'int'  # uint64
     situation_goal_id: 'int'  # uint64
+    completed_via_autonomy: 'bool'

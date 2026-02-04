@@ -15,6 +15,7 @@ from protocolbuffers.S4Common_pb2 import *
 from protocolbuffers.Venue_pb2 import *
 from protocolbuffers.Consts_pb2 import *
 from protocolbuffers.CustomSchedule_pb2 import *
+from protocolbuffers.Kingdom_pb2 import *
 
 
 class PersistenceActions(IntEnum):
@@ -215,6 +216,7 @@ class SaveSlotData(Message):
     tutorial_mode: 'int'  # int32
     game_content_data: 'GameContentData'
     applied_aging_fixup: 'bool'
+    kingdom_service: 'PersistableKingdomService'
 
 
 class SaveSlotDataDescOnly(Message):

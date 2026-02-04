@@ -303,6 +303,17 @@ class PlumbbobSetPlumbbobOverrideModelKey(Message):
     overrides: 'RepeatedCompositeFieldContainer[PlumbbobOverrideModelKey]'
 
 
+class PlumbbobEnsembleTintOverride(Message):
+    # __init__
+    color: 'Vector3'
+    alpha: 'float'  # float32
+
+
+class PlumbbobEnsembleTextureOverride(Message):
+    # __init__
+    texture_id: 'int'  # uint64
+
+
 class ServerResponseFailed(Message):
     class Reason(IntEnum):
         REJECT_CLIENT_SELECT_MIXERINTERACTION: 'ServerResponseFailed.Reason' = 1
@@ -626,6 +637,7 @@ class AddBalloon(Message):
     category_icon: 'IconInfo'
     view_offset_override: 'Vector3'
     rel_track: 'RelationshipTrack'
+    icon_info: 'IconInfo'
 
 
 class ReslotPlumbbob(Message):
@@ -714,6 +726,8 @@ class CareerInfo(Message):
     hourly_pay: 'int'  # uint32
     benefit_description: 'LocalizedString'
     not_selectable_tooltip: 'LocalizedString'
+    work_from_home_description: 'LocalizedString'
+    enable_infants_tray_button: 'bool'
 
 
 class CareerSelectionUI(Message):
@@ -802,6 +816,7 @@ class DevelopmentalMilestoneUpdate(Message):
     completed_time: 'int'  # uint64
     age_completed: 'int'  # uint32
     unlocked_small_business_name: 'str'
+    unlocked_dynasty_name: 'str'
 
 
 class AllDevelopmentalMilestonesUpdate(Message):

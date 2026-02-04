@@ -18,6 +18,8 @@ from protocolbuffers.Roommates_pb2 import *
 from protocolbuffers.Calendar_pb2 import *
 from protocolbuffers.Outfits_pb2 import *
 from protocolbuffers.CustomSchedule_pb2 import *
+from protocolbuffers.S4Common_pb2 import *
+from protocolbuffers.Kingdom_pb2 import *
 
 
 class EcoFootprintStateType(IntEnum):
@@ -580,6 +582,8 @@ class PersistableBidirectionalRelationshipData(Message):
     relationship_bit_locks: 'RepeatedCompositeFieldContainer[PersistableRelationshipBitLock]'
     compatibility_score: 'float'  # float32
     compatibility_level: 'int'  # uint32
+    family_trope_id: 'int'  # uint64
+    romance_trope_id: 'int'  # uint64
 
 
 class PersistableRelationshipLabelData(Message):
@@ -774,6 +778,33 @@ class PersistableHorseCompetitionService(Message):
     # __init__
     competitions: 'RepeatedCompositeFieldContainer[HorseCompetitionData]'
     horse_placements: 'RepeatedCompositeFieldContainer[HorseCompetitionHorsePlacementData]'
+
+
+class SimCompetitionData(Message):
+    # __init__
+    competition_id: 'int'  # uint64
+    sim_id: 'int'  # fixed uint64
+    situation_id: 'int'  # fixed uint64
+    default_object_id: 'int'  # fixed uint64
+    object_tag: 'int'  # uint32
+
+
+class SimCompetitionHighestPlacementData(Message):
+    # __init__
+    competition_id: 'int'  # uint64
+    highest_placement: 'int'  # uint64
+
+
+class SimCompetitionSimPlacementData(Message):
+    # __init__
+    sim_id: 'int'  # fixed uint64
+    placements: 'RepeatedCompositeFieldContainer[SimCompetitionHighestPlacementData]'
+
+
+class PersistableSimCompetitionService(Message):
+    # __init__
+    competitions: 'RepeatedCompositeFieldContainer[SimCompetitionData]'
+    sim_placements: 'RepeatedCompositeFieldContainer[SimCompetitionSimPlacementData]'
 
 
 class NarrativeProgressionData(Message):
@@ -1086,6 +1117,48 @@ class PersistablePromService(Message):
 class PersistableSimSecretsService(Message):
     # __init__
     unavailable_secrets: 'RepeatedCompositeFieldContainer[int]'  # uint64
+    scandal_secrets_data: 'PersistableSimSecretsScandalsData'
+
+
+class PersistableSimSecretsScandalsData(Message):
+    # __init__
+    secrets: 'RepeatedCompositeFieldContainer[ScandalSecretData]'
+    sim_secrets: 'RepeatedCompositeFieldContainer[SimSecretData]'
+    known_secrets: 'RepeatedCompositeFieldContainer[SimSecretData]'
+
+
+class ScandalSecretData(Message):
+    # __init__
+    secret_id: 'int'  # fixed uint64
+    secret_guid: 'int'  # fixed uint64
+    status_id: 'int'  # int32
+    initial_status_id: 'int'  # int32
+    complicit_sims_ids: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    secret_keepers: 'RepeatedCompositeFieldContainer[SecretKeepersData]'
+    secret_remaining_time: 'int'  # uint64
+    dead_complicit_sims_ids: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    notebook_status: 'RepeatedCompositeFieldContainer[SecretNotebookStatus]'
+    sold: 'bool'
+    secret_expiration_date: 'int'  # fixed uint64
+
+
+class SecretNotebookStatus(Message):
+    # __init__
+    sim_id: 'int'  # fixed uint64
+    is_new: 'bool'
+
+
+class SimSecretData(Message):
+    # __init__
+    sim_id: 'int'  # fixed uint64
+    secret_ids: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+
+
+class SecretKeepersData(Message):
+    # __init__
+    secret_owner_id: 'int'  # fixed uint64
+    secret_keeper_id: 'int'  # fixed uint64
+    status_id: 'int'  # int32
 
 
 class PersistableCareerService(Message):
@@ -1205,6 +1278,12 @@ class GameplaySaveSlotData(Message):
     wisp_service: 'PersistableWispService'
     imaginary_friend_service: 'PersistableImaginaryFriendService'
     custom_schedule_service: 'PersistableCustomScheduleService'
+    kingdom_service: 'PersistableKingdomService'
+    dynasty_service: 'PersistableDynastyService'
+    sim_object_relationship_service: 'PersistableGlobalSimObjectRelationshipService'
+    family_tree_service: 'PersistableFamilyTreeService'
+    sim_competition_service: 'PersistableSimCompetitionService'
+    family_tree_forgery_service: 'PersistableFamilyTreeForgeryService'
 
 
 class PersistableRelgraphService(Message):
@@ -1407,6 +1486,11 @@ class GameplayOptions(Message):
     balance_system_enabled: 'bool'
     luck_enabled: 'bool'
     ailments_enabled: 'bool'
+    show_adopted_sims: 'bool'
+    npc_blackmail_system_enabled: 'bool'
+    scandal_system_enabled: 'bool'
+    noble_career_auto_promotion_enabled: 'bool'
+    dynasty_prestige_decay_enabled: 'bool'
 
 
 class RestaurantZoneDirectorData(Message):
@@ -1671,6 +1755,7 @@ class GameplaySimData(Message):
     reincarnation_data: 'ReincarnationData'
     extra_personality_trait_slot: 'RepeatedCompositeFieldContainer[int]'  # uint64
     restore_wings: 'bool'
+    spawn_object_id: 'int'  # uint64
 
 
 class PremadeLotStatus(Message):
@@ -1688,6 +1773,9 @@ class EnsembleData(Message):
     # __init__
     ensemble_type_id: 'int'  # fixed uint64
     sim_ids: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    override_texture_id: 'int'  # uint64
+    override_tint_color: 'int'  # uint32
+    override_alpha: 'float'  # float32
 
 
 class MissingPetTrackerData(Message):
@@ -2008,3 +2096,147 @@ class PersistableCustomScheduleService(Message):
     duration: 'int'  # uint32
     schedule: 'CustomSchedule'
     owner_id: 'int'  # uint64
+
+
+class PersistableDynastyService(Message):
+    # __init__
+    dynasty_data: 'RepeatedCompositeFieldContainer[DynastySaveData]'
+
+
+class DynastyMemberData(Message):
+    # __init__
+    member_id: 'int'  # fixed uint64
+    dynasty_rank: 'int'  # uint32
+    prestige: 'RepeatedCompositeFieldContainer[float]'  # float32
+    is_black_sheep: 'bool'
+
+
+class DynastySaveData(Message):
+    # __init__
+    dynasty_id: 'int'  # fixed uint64
+    name: 'str'
+    icon: 'ResourceKey'
+    head_sim_id: 'int'  # fixed uint64
+    heir_sim_id: 'int'  # fixed uint64
+    members: 'RepeatedCompositeFieldContainer[DynastyMemberData]'
+    values: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    alliances: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    rivalries: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    description: 'str'
+    icon_background: 'ResourceKey'
+    bucks_data: 'RepeatedCompositeFieldContainer[BucksData]'
+    total_prestige: 'float'  # float32
+
+
+class SetDynastyData(Message):
+    # __init__
+    dynasty_id: 'int'  # fixed uint64
+    name: 'str'
+    icon: 'ResourceKey'
+    head_sim_id: 'int'  # fixed uint64
+    spouse_sim_id: 'int'  # fixed uint64
+    members: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    values: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+    description: 'str'
+    heir_sim_id: 'int'  # fixed uint64
+    icon_background: 'ResourceKey'
+
+
+class PersistableGlobalSimObjectRelationshipService(Message):
+    # __init__
+    object_data: 'RepeatedCompositeFieldContainer[SimObjectRelationshipObjectDataByTag]'
+    sim_to_object_data: 'RepeatedCompositeFieldContainer[SimToObjectData]'
+
+
+class SimObjectRelationshipObjectDataByTag(Message):
+    # __init__
+    object_data: 'RepeatedCompositeFieldContainer[SimObjectRelationshipObjectData]'
+    tag: 'int'  # uint32
+
+
+class SimObjectRelationshipObjectData(Message):
+    # __init__
+    object_id: 'int'  # fixed uint64
+    zone_id: 'int'  # fixed uint64
+    travel_destination_zone_id: 'int'  # fixed uint64
+
+
+class SimToObjectData(Message):
+    # __init__
+    sim_id: 'int'  # fixed uint64
+    objects_ids: 'RepeatedCompositeFieldContainer[int]'  # fixed uint64
+
+
+class PersistableFamilyTreeService(Message):
+    # __init__
+    family_tree_graph: 'FamilyTreeGraph'
+
+
+class FamilyTreeNodeKingdomData(Message):
+    # __init__
+    localized_title: 'int'  # uint64
+    custom_title: 'str'
+    region_name: 'int'  # uint64
+    level: 'int'  # uint32
+
+
+class FamilyTreeNode(Message):
+    # __init__
+    sim_id: 'int'  # uint64
+    first_name: 'str'
+    last_name: 'str'
+    outgoing_edges: 'RepeatedCompositeFieldContainer[FamilyTreeEdge]'
+    full_name: 'LocalizedString'
+    thumbnail_override: 'ResourceKey'
+    death_trait_id_override: 'int'  # uint64
+    gender: 'int'  # uint32
+    culled: 'bool'
+    dead_kingdom_data: 'FamilyTreeNodeKingdomData'
+
+
+class FamilyTreeEdge(Message):
+    # __init__
+    source_sim_id: 'int'  # uint64
+    target_sim_id: 'int'  # uint64
+    relationship_flags: 'int'  # uint64
+
+
+class FamilyTreePremadeAncestor(Message):
+    # __init__
+    tuning_id: 'int'  # uint64
+    ancestor_sim_id: 'int'  # uint64
+    full_name: 'LocalizedString'
+    thumbnail_id: 'ResourceKey'
+
+
+class FamilyTreeFixupApplied(Message):
+    # __init__
+    sim_id_a: 'int'  # uint64
+    sim_id_b: 'int'  # uint64
+
+
+class FamilyTreeGraph(Message):
+    # __init__
+    nodes: 'RepeatedCompositeFieldContainer[FamilyTreeNode]'
+    premade_ancestors: 'RepeatedCompositeFieldContainer[FamilyTreePremadeAncestor]'
+    family_fixups: 'RepeatedCompositeFieldContainer[FamilyTreeFixupApplied]'
+
+
+class PersistableFamilyTreeForgeryService(Message):
+    # __init__
+    forgeries: 'RepeatedCompositeFieldContainer[FamilyTreeForgery]'
+
+
+class FamilyTreeForgery(Message):
+    # __init__
+    forger_sim_id: 'int'  # uint64
+    forgery_aware_sim_ids: 'RepeatedCompositeFieldContainer[int]'  # uint64
+    forged_connections: 'RepeatedCompositeFieldContainer[FamilyTreeForgeryConnection]'
+    secret_parent_id: 'int'  # uint64
+    secret_children_ids: 'RepeatedCompositeFieldContainer[int]'  # uint64
+
+
+class FamilyTreeForgeryConnection(Message):
+    # __init__
+    child_sim_id: 'int'  # uint64
+    parent_sim_id: 'int'  # uint64
