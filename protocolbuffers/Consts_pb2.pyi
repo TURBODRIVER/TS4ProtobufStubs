@@ -2109,6 +2109,25 @@ EVOP_INVALID = EventOpResponse.EVOP_INVALID
 EVOP_OP_FAIL_THROTTLE = EventOpResponse.EVOP_OP_FAIL_THROTTLE
 
 
+class ExchangeSpeciesFilter(IntEnum):
+    ALL: 'ExchangeSpeciesFilter' = 0
+    DOGS: 'ExchangeSpeciesFilter' = 1
+    CATS: 'ExchangeSpeciesFilter' = 2
+    FOXES: 'ExchangeSpeciesFilter' = 3
+    HORSES: 'ExchangeSpeciesFilter' = 4
+    WITH_PETS: 'ExchangeSpeciesFilter' = 5
+    NO_PETS: 'ExchangeSpeciesFilter' = 6
+
+
+ALL = ExchangeSpeciesFilter.ALL
+DOGS = ExchangeSpeciesFilter.DOGS
+CATS = ExchangeSpeciesFilter.CATS
+FOXES = ExchangeSpeciesFilter.FOXES
+HORSES = ExchangeSpeciesFilter.HORSES
+WITH_PETS = ExchangeSpeciesFilter.WITH_PETS
+NO_PETS = ExchangeSpeciesFilter.NO_PETS
+
+
 description: 'str'
 
 

@@ -119,7 +119,7 @@ class TrayHouseholdMetadata(Message):
 class TrayMetadata(Message):
     class TrayMetadataVersion(IntEnum):
         v000: 'TrayMetadata.TrayMetadataVersion' = 0
-        currentVersion: 'TrayMetadata.TrayMetadataVersion' = 12100
+        currentVersion: 'TrayMetadata.TrayMetadataVersion' = 12200
 
     v000 = TrayMetadataVersion.v000
     currentVersion = TrayMetadataVersion.currentVersion
@@ -375,6 +375,10 @@ class ExchangeCombinedSearch(Message):
     compatible_item_version: 'int'  # uint32
     keyword_type: 'KeywordSearchType'
     sku_bits: 'RepeatedCompositeFieldContainer[int]'  # uint32
+    gallery_must_have_filters: 'bool'
+    packs_ids: 'RepeatedCompositeFieldContainer[int]'  # uint32
+    products_ids: 'RepeatedCompositeFieldContainer[int]'  # uint64
+    species_filter: 'ExchangeSpeciesFilter'
 
 
 class ExchangeTestParameters(Message):
