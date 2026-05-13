@@ -1491,6 +1491,7 @@ class GameplayOptions(Message):
     scandal_system_enabled: 'bool'
     noble_career_auto_promotion_enabled: 'bool'
     dynasty_prestige_decay_enabled: 'bool'
+    autonomy_infants_caregiver_disabled: 'bool'
 
 
 class RestaurantZoneDirectorData(Message):
@@ -1756,6 +1757,7 @@ class GameplaySimData(Message):
     extra_personality_trait_slot: 'RepeatedCompositeFieldContainer[int]'  # uint64
     restore_wings: 'bool'
     spawn_object_id: 'int'  # uint64
+    carrying_sim: 'int'  # fixed uint64
 
 
 class PremadeLotStatus(Message):
