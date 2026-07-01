@@ -1334,6 +1334,11 @@ class AccountEventDataTracker(Message):
     milestone_completion_counts: 'RepeatedCompositeFieldContainer[MilestoneCompletionCount]'
 
 
+class FestivalNotificationBlacklist(Message):
+    # __init__
+    disabled_option_keys: 'RepeatedCompositeFieldContainer[int]'  # int64
+
+
 class GameplayOptions(Message):
     class AutonomyLevel(IntEnum):
         OFF: 'GameplayOptions.AutonomyLevel' = 0
@@ -1492,6 +1497,7 @@ class GameplayOptions(Message):
     noble_career_auto_promotion_enabled: 'bool'
     dynasty_prestige_decay_enabled: 'bool'
     autonomy_infants_caregiver_disabled: 'bool'
+    festival_notification_blacklist: 'FestivalNotificationBlacklist'
 
 
 class RestaurantZoneDirectorData(Message):
@@ -2103,6 +2109,7 @@ class PersistableCustomScheduleService(Message):
 class PersistableDynastyService(Message):
     # __init__
     dynasty_data: 'RepeatedCompositeFieldContainer[DynastySaveData]'
+    offspring_repair_done: 'bool'
 
 
 class DynastyMemberData(Message):

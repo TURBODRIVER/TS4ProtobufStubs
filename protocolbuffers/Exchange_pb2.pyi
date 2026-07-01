@@ -119,7 +119,7 @@ class TrayHouseholdMetadata(Message):
 class TrayMetadata(Message):
     class TrayMetadataVersion(IntEnum):
         v000: 'TrayMetadata.TrayMetadataVersion' = 0
-        currentVersion: 'TrayMetadata.TrayMetadataVersion' = 12400
+        currentVersion: 'TrayMetadata.TrayMetadataVersion' = 12500
 
     v000 = TrayMetadataVersion.v000
     currentVersion = TrayMetadataVersion.currentVersion
@@ -249,6 +249,7 @@ class ExchangeEnvelope(Message):
     payload: 'bytes'
     metadata: 'TrayMetadata'
     thumbnail_message: 'ExchangeEnvelope.ThumbnailMessage'
+    products_ids: 'RepeatedCompositeFieldContainer[int]'  # uint64
     thumbnail_info: 'RepeatedCompositeFieldContainer[int]'  # uint32
     thumbnail_data: 'RepeatedCompositeFieldContainer[bytes]'
 
