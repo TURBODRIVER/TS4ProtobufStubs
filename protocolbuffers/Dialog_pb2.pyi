@@ -891,6 +891,7 @@ class UiDialogNotification(Message):
     does_persist: 'bool'
     career_args: 'UiCareerNotificationArgs'
     auto_delete_reason: 'UiDialogNotification.NotificationAutoDeleteReason'
+    disable_prompt_buttons_during_save_lock: 'bool'
 
 
 class UiCareerNotificationArgs(Message):

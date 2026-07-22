@@ -119,7 +119,7 @@ class TrayHouseholdMetadata(Message):
 class TrayMetadata(Message):
     class TrayMetadataVersion(IntEnum):
         v000: 'TrayMetadata.TrayMetadataVersion' = 0
-        currentVersion: 'TrayMetadata.TrayMetadataVersion' = 12500
+        currentVersion: 'TrayMetadata.TrayMetadataVersion' = 12600
 
     v000 = TrayMetadataVersion.v000
     currentVersion = TrayMetadataVersion.currentVersion
@@ -234,6 +234,12 @@ class TrayPartMetadata(Message):
     part_Id: 'RepeatedCompositeFieldContainer[int]'  # uint64
 
 
+class ObjectURL(Message):
+    # __init__
+    uuid: 'bytes'
+    url: 'RepeatedCompositeFieldContainer[str]'
+
+
 class ExchangeEnvelope(Message):
     class ThumbnailMessage():
         # __init__
@@ -250,6 +256,7 @@ class ExchangeEnvelope(Message):
     metadata: 'TrayMetadata'
     thumbnail_message: 'ExchangeEnvelope.ThumbnailMessage'
     products_ids: 'RepeatedCompositeFieldContainer[int]'  # uint64
+    uuid_url: 'ObjectURL'
     thumbnail_info: 'RepeatedCompositeFieldContainer[int]'  # uint32
     thumbnail_data: 'RepeatedCompositeFieldContainer[bytes]'
 
@@ -281,10 +288,12 @@ class BaseUri(Message):
         UNKNOWN: 'BaseUri.BaseUriType' = 0
         LEGACY_CDN: 'BaseUri.BaseUriType' = 1
         GOOGLE_CLOUD_STORAGE: 'BaseUri.BaseUriType' = 2
+        UGC_SERVICE: 'BaseUri.BaseUriType' = 3
 
     UNKNOWN = BaseUriType.UNKNOWN
     LEGACY_CDN = BaseUriType.LEGACY_CDN
     GOOGLE_CLOUD_STORAGE = BaseUriType.GOOGLE_CLOUD_STORAGE
+    UGC_SERVICE = BaseUriType.UGC_SERVICE
 
     # __init__
     type: 'BaseUri.BaseUriType'

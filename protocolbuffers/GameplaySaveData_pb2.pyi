@@ -1498,6 +1498,12 @@ class GameplayOptions(Message):
     dynasty_prestige_decay_enabled: 'bool'
     autonomy_infants_caregiver_disabled: 'bool'
     festival_notification_blacklist: 'FestivalNotificationBlacklist'
+    autosave_real_time_enabled: 'bool'
+    autosave_sim_time_frequency: 'int'  # uint32
+    save_reminder_frequency: 'int'  # uint32
+    autosave_on_build_buy_exit: 'bool'
+    autosave_on_travel: 'bool'
+    autosave_real_time_frequency: 'int'  # uint32
 
 
 class RestaurantZoneDirectorData(Message):
