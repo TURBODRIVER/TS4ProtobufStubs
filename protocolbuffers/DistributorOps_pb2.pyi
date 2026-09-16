@@ -463,6 +463,7 @@ class Operation(Message):
         KINGDOM_REQUEST_DEFAULT_PRONOUNS: 'Operation.Type' = 1329
         SET_ANCESTORS_DATA: 'Operation.Type' = 1330
         REQUEST_AUTOSAVE: 'Operation.Type' = 1331
+        GSI_DATA: 'Operation.Type' = 1332
 
     OBJECT_DELETE = Type.OBJECT_DELETE
     SET_TRANSFORM = Type.SET_TRANSFORM
@@ -907,6 +908,7 @@ class Operation(Message):
     KINGDOM_REQUEST_DEFAULT_PRONOUNS = Type.KINGDOM_REQUEST_DEFAULT_PRONOUNS
     SET_ANCESTORS_DATA = Type.SET_ANCESTORS_DATA
     REQUEST_AUTOSAVE = Type.REQUEST_AUTOSAVE
+    GSI_DATA = Type.GSI_DATA
 
     # __init__
     type: 'Operation.Type'
@@ -2837,3 +2839,9 @@ class ScandalSecretInfo(Message):
     secret_owner_id: 'int'  # fixed uint64
     secret_keeper_id: 'int'  # fixed uint64
     scandal_secret: 'ScandalSecretSimpleData'
+
+
+class GSIData(Message):
+    # __init__
+    text: 'str'
+    context_data: 'str'

@@ -217,6 +217,8 @@ class SaveSlotData(Message):
     game_content_data: 'GameContentData'
     applied_aging_fixup: 'bool'
     kingdom_service: 'PersistableKingdomService'
+    preferred_manual_slot_id: 'int'  # uint32
+    preferred_manual_slot_name: 'str'
 
 
 class SaveSlotDataDescOnly(Message):
