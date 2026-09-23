@@ -1770,6 +1770,7 @@ class GameplaySimData(Message):
     restore_wings: 'bool'
     spawn_object_id: 'int'  # uint64
     carrying_sim: 'int'  # fixed uint64
+    carry_track: 'int'  # uint32
 
 
 class PremadeLotStatus(Message):

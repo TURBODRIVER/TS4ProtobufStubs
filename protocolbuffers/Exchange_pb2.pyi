@@ -119,7 +119,7 @@ class TrayHouseholdMetadata(Message):
 class TrayMetadata(Message):
     class TrayMetadataVersion(IntEnum):
         v000: 'TrayMetadata.TrayMetadataVersion' = 0
-        currentVersion: 'TrayMetadata.TrayMetadataVersion' = 12700
+        currentVersion: 'TrayMetadata.TrayMetadataVersion' = 12800
 
     v000 = TrayMetadataVersion.v000
     currentVersion = TrayMetadataVersion.currentVersion
