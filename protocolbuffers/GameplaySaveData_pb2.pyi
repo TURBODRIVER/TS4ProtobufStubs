@@ -1504,6 +1504,8 @@ class GameplayOptions(Message):
     autosave_on_build_buy_exit: 'bool'
     autosave_on_travel: 'bool'
     autosave_real_time_frequency: 'int'  # uint32
+    weight_changes_enabled: 'bool'
+    muscles_changes_enabled: 'bool'
 
 
 class RestaurantZoneDirectorData(Message):
